@@ -1,0 +1,7 @@
+Flask==3.0.3
+pandas==2.2.2
+numpy==1.26.4
+SQLAlchemy==2.0.31
+pdfplumber==0.11.0
+openpyxl
+gunicorn

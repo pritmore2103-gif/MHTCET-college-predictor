@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="hero-card text-center mb-4">
+
+```
+<h1 class="fw-bold">
+    🎓 Prediction Results
+</h1>
+
+<p class="lead">
+    Personalized college recommendations based on your percentile
+</p>
+```
+
+</div>
+
+<!-- Filter Buttons -->
+
+<div class="text-center mb-4">
+
+```
+<button class="btn btn-primary me-2"
+        onclick="filterColleges('All')">
+    All
+</button>
+
+<button class="btn btn-success me-2"
+        onclick="filterColleges('Safe')">
+    🟢 Safe
+</button>
+
+<button class="btn btn-warning me-2"
+        onclick="filterColleges('Moderate')">
+    🟡 Moderate
+</button>
+
+<button class="btn btn-danger"
+        onclick="filterColleges('Dream')">
+    🔴 Dream
+</button>
+```
+
+</div>
+
+<!-- Stats Cards -->
+
+<div class="row mb-4">
+
+```
+<div class="col-md-3 col-6 mb-3">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h3>{{ percentile }}</h3>
+            <p>Your Percentile</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-6 mb-3">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h3>🟢 {{ safe_count }}</h3>
+            <p>Safe</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-6 mb-3">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h3>🟡 {{ moderate_count }}</h3>
+            <p>Moderate</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-6 mb-3">
+    <div class="card text-center shadow-sm">
+        <div class="card-body">
+            <h3>🔴 {{ dream_count }}</h3>
+            <p>Dream</p>
+        </div>
+    </div>
+</div>
+```
+
+</div>
+
+<!-- Chart -->
+
+<div class="card p-4 mb-4">
+    <canvas id="chanceChart"></canvas>
+</div>
+
+<!-- Action Buttons -->
+
+<div class="mb-4">
+
+```
+<div class="d-none d-md-block">
+    <a href="/download" class="btn btn-success">
+        📊 Download Excel Report
+    </a>
+</div>
+
+<a href="/" class="btn btn-outline-primary mt-2">
+    ⬅ New Prediction
+</a>
+```
+
+</div>
+
+<!-- Search -->
+
+<input
+ type="text"
+ id="searchBox"
+ class="form-control mb-4"
+ placeholder="🔍 Search College...">
+
+<!-- Mobile View -->
+
+<div class="d-md-none">
+
+{% for r in results %}
+
+<div class="college-card card mb-3"
+     data-chance="{{ r.chance }}">
+
+```
+<div class="card-body">
+
+    <h5>{{ r.college }}</h5>
+
+    <p>
+        <strong>Branch:</strong>
+        {{ r.branch }}
+    </p>
+
+    <p>
+        <strong>Cutoff:</strong>
+        {{ r.cutoff }}
+    </p>
+
+    {% if r.chance == "Safe" %}
+        <span class="badge bg-success">Safe</span>
+
+    {% elif r.chance == "Moderate" %}
+        <span class="badge bg-warning text-dark">
+            Moderate
+        </span>
+
+    {% else %}
+        <span class="badge bg-danger">
+            Dream
+        </span>
+    {% endif %}
+
+</div>
+```
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- Desktop Table -->
+
+<div class="table-responsive d-none d-md-block">
+
+<table class="table table-hover table-striped">
+
+```
+<thead class="table-dark">
+
+    <tr>
+        <th>College</th>
+        <th>Branch</th>
+        <th>Cutoff</th>
+        <th>Chance</th>
+    </tr>
+
+</thead>
+
+<tbody id="collegeTable">
+
+{% for r in results %}
+
+    <tr data-chance="{{ r.chance }}">
+
+        <td>{{ r.college }}</td>
+
+        <td>{{ r.branch }}</td>
+
+        <td>{{ r.cutoff }}</td>
+
+        <td>
+
+            {% if r.chance == "Safe" %}
+                <span class="badge bg-success">
+                    Safe
+                </span>
+
+            {% elif r.chance == "Moderate" %}
+                <span class="badge bg-warning text-dark">
+                    Moderate
+                </span>
+
+            {% else %}
+                <span class="badge bg-danger">
+                    Dream
+                </span>
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+{% endfor %}
+
+</tbody>
+```
+
+</table>
+
+</div>
+
+<script>
+
+const chartCanvas = document.getElementById("chanceChart");
+
+if(chartCanvas){
+
+    new Chart(chartCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "Safe",
+                "Moderate",
+                "Dream"
+            ],
+
+            datasets: [{
+
+                data: [
+                    Number("{{ safe_count }}"),
+                    Number("{{ moderate_count }}"),
+                    Number("{{ dream_count }}")
+                ]
+
+            }]
+
+        },
+
+        options: {
+            responsive: true
+        }
+
+    });
+
+}
+
+document.getElementById("searchBox")
+.addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    document
+    .querySelectorAll("#collegeTable tr")
+    .forEach(row => {
+
+        row.style.display =
+            row.innerText.toLowerCase().includes(value)
+            ? ""
+            : "none";
+
+    });
+
+    document
+    .querySelectorAll(".college-card")
+    .forEach(card => {
+
+        card.style.display =
+            card.innerText.toLowerCase().includes(value)
+            ? ""
+            : "none";
+
+    });
+
+});
+
+function filterColleges(type){
+
+    document
+    .querySelectorAll("#collegeTable tr")
+    .forEach(row => {
+
+        const chance = row.dataset.chance;
+
+        row.style.display =
+            (type === "All" || chance === type)
+            ? ""
+            : "none";
+
+    });
+
+    document
+    .querySelectorAll(".college-card")
+    .forEach(card => {
+
+        const chance = card.dataset.chance;
+
+        card.style.display =
+            (type === "All" || chance === type)
+            ? ""
+            : "none";
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

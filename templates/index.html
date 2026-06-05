@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="hero-card text-center mb-4">
+
+    <h1 class="display-5 fw-bold">
+        🎓 MHT-CET College Predictor
+    </h1>
+
+    <p class="lead">
+        Predict colleges based on your percentile, category, branch and city.
+    </p>
+
+</div>
+
+<div class="card shadow-lg border-0">
+
+    <div class="card-body p-4">
+
+        <form action="/predict" method="POST">
+
+            <div class="row">
+
+                <!-- Percentile -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Percentile
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        name="percentile"
+                        class="form-control form-control-lg"
+                        placeholder="Enter Percentile"
+                        required>
+
+                </div>
+
+                <!-- Category -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Category
+                    </label>
+
+                    <select
+                        name="category"
+                        class="form-select form-select-lg">
+
+                        <option value="All">All Categories</option>
+
+                        <option value="GOPENS">Open</option>
+
+                        <option value="GOBCS">OBC</option>
+
+                        <option value="GSCS">SC</option>
+
+                        <option value="GSTS">ST</option>
+
+                        <option value="EWS">EWS</option>
+
+                    </select>
+
+                </div>
+
+                <!-- Branch -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Branch
+                    </label>
+
+                    <select
+                        name="branch"
+                        class="form-select form-select-lg">
+
+                        <option value="All">
+                            All Branches
+                        </option>
+
+                        <option value="Computer / IT">
+                            Computer / IT
+                        </option>
+
+                        <option value="Mechanical">
+                            Mechanical
+                        </option>
+
+                        <option value="Civil">
+                            Civil
+                        </option>
+
+                        <option value="Electrical">
+                            Electrical
+                        </option>
+
+                        <option value="Electronics">
+                            Electronics
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- City -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label fw-bold">
+                        City
+                    </label>
+
+                    <select
+                        name="city"
+                        class="form-select form-select-lg">
+
+                        <option value="All">
+                            All Cities
+                        </option>
+
+                        <option value="Pune">
+                            Pune
+                        </option>
+
+                        <option value="Mumbai">
+                            Mumbai
+                        </option>
+
+                        <option value="Nagpur">
+                            Nagpur
+                        </option>
+
+                        <option value="Nashik">
+                            Nashik
+                        </option>
+
+                        <option value="Kolhapur">
+                            Kolhapur
+                        </option>
+
+                        <option value="Sangli">
+                            Sangli
+                        </option>
+
+                        <option value="Satara">
+                            Satara
+                        </option>
+
+                        <option value="Solapur">
+                            Solapur
+                        </option>
+
+                        <option value="Aurangabad">
+                            Aurangabad
+                        </option>
+
+                        <option value="Amravati">
+                            Amravati
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="d-grid mt-3">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-lg">
+
+                    🔍 Predict Colleges
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h3>46,000+</h3>
+
+                <p class="mb-0">
+                    Cutoff Records
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h3>CAP I, II, III</h3>
+
+                <p class="mb-0">
+                    Complete CAP Data
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card text-center shadow-sm">
+
+            <div class="card-body">
+
+                <h3>Mobile Friendly</h3>
+
+                <p class="mb-0">
+                    Fast & Responsive
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
